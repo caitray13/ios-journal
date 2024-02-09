@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "journal",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authjournal33976a35",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

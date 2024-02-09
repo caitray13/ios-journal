@@ -1,32 +1,29 @@
-//
-//  JournalApp.swift
-//  Journal
-//
-//  Created by Caitlin Ray on 08/02/2024.
-//
-
+import Amplify
+import AWSAPIPlugin
+import AWSCognitoAuthPlugin
+import AWSS3StoragePlugin
 import SwiftUI
-import SwiftData
 
 @main
 struct JournalApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+    init() {
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            try Amplify.add(plugin: AWSCognitoAuthPlugin())
+            try Amplify.add(plugin: AWSAPIPlugin(modelRegistration: AmplifyModels()))
+            try Amplify.add(plugin: AWSS3StoragePlugin())
+            try Amplify.configure()
+            print("Initialized Amplify");
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            print("Could not initialize Amplify: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LandingView()
+                .environmentObject(JournalService())
+                .environmentObject(AuthenticationService())
+                .environmentObject(StorageService())
         }
-        .modelContainer(sharedModelContainer)
     }
 }

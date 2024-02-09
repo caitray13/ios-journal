@@ -1,0 +1,10 @@
+type Entry
+@model
+@auth (rules: [ { allow: owner } ]) {
+    id: ID!
+    name: String!
+    desc1: String
+    desc2: String
+    desc3: String
+    image: String
+}
